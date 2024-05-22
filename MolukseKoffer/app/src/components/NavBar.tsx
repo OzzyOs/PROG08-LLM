@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 const NavBar = () => {
 
     return (
-        <nav className="navbar || flex flex-col h-screen border-2 rounded-2xl max-w-1/5 w-80">
+        <nav className="navbar || flex flex-col h-screen border-2 rounded-md max-w-1/5 w-72">
             <div>
                 <h1 className="text-4xl mt-20 ">
                     <NavLink to='/' className="flex justify-center font-bold">Molukse Koffer</NavLink>
