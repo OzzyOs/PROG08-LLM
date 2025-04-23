@@ -5,3 +5,4 @@
 LLM die reageert met de rol van een Dwerg uit de wereld van "The Lord of the Rings".
 Met toegang tot een document van 15 pagina's, kan het language model vragen beantwoorden met betrekking tot het document en andere vragen.
 
+Built with React and LangChain.
