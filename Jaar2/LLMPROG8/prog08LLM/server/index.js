@@ -54,7 +54,7 @@ app.use(express.urlencoded({ extended: true }))
 const port = 5000;
 const model = new AzureChatOpenAI({temperature: 1})
 const promptTemplate = ChatPromptTemplate.fromMessages([
-    ["system", ""],
+    ["system", "Respond to each prompt like a Dwarf from the Lord of the Rings"],
     ["human", "{input}"]
 ]);
 
