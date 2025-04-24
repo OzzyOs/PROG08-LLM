@@ -91,6 +91,7 @@ function App() {
         e.preventDefault();
         askQuestion();
     };
+    console.log("LOTR API Key:", process.env.REACT_APP_LOTR_API_KEY);
 
     return (
 
@@ -114,7 +115,7 @@ function App() {
                 <div style={{
                     backgroundColor: "gray",
                     marginBottom: '2em',
-                    padding: '1em',
+                    padding: '2em',
                     borderRadius: 5,
                     color: "white",
                     maxWidth: "200px",
@@ -122,7 +123,7 @@ function App() {
                     maxHeight: "200px",
                     minHeight: "200px",
                     overflow: 'hidden',
-                    overflowY: 'hidden',
+                    overflowY: 'auto',
                 }}>
                     <blockquote>{quote}</blockquote>
                     <cite>- {character}</cite>
