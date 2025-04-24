@@ -10,7 +10,7 @@ import { FaissStore } from "@langchain/community/vectorstores/faiss"; // Import 
 
 dotenv.config();
 
-// const client = new InferenceClient("");
+// const client = new InferenceClient("process.env.HUGGING_FACE");
 
 const embeddings = new AzureOpenAIEmbeddings({
     temperature: 0,
@@ -73,10 +73,10 @@ splitDocs.forEach((doc, index) => {
 //     res.json({message: result})
 // });
 
-app.get('/', async (req, res) => {
-    // const result = await tellJoke()
-    // res.json({message: result})
-});
+// app.get('/', async (req, res) => {
+//     const result = await tellJoke()
+//     res.json({message: result})
+// });
 // END TEST END POINT CALL
 
 app.post('/', async (req, res) => {
