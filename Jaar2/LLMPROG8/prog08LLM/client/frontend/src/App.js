@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 
 function App() {
+    const [quote, setQuote] = useState('');
+    const [character, setCharacter] = useState('');
     const [question, setQuestion] = useState('');
     const [prompt, setPrompt] = useState('');
     const [history, setHistory] = useState(()=>{
@@ -8,6 +10,38 @@ function App() {
         return saved ? JSON.parse(saved) : [];
     });
 
+    useEffect(() => {
+        const headers = {
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${process.env.REACT_APP_LOTR_API_KEY}`,
+        };
+
+        const fetchData = async () => {
+            try {
+                const rawQuotes = await fetch('https://the-one-api.dev/v2/quote', {
+                    headers: headers,
+                });
+
+                const quotes = await rawQuotes.json();
+                const quoteData: Quote = quotes.docs[Math.floor(Math.random() * quotes.docs.length)];
+
+                setQuote(quoteData.dialog);
+
+                const rawCharacters = await fetch(`https://the-one-api.dev/v2/character?_id=${quoteData.character}`, {
+                    headers: headers,
+                });
+
+                const characters = await rawCharacters.json();
+                const characterData: Character = characters.docs[0];
+
+                setCharacter(characterData.name);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const askQuestion = async () => {
         // When function is called, do a post request, with the prompt state as input.
@@ -57,8 +91,10 @@ function App() {
         e.preventDefault();
         askQuestion();
     };
+    console.log("LOTR API Key:", process.env.REACT_APP_LOTR_API_KEY);
 
     return (
+
         <div style={{  textAlign: 'center',
             backgroundColor: 'green',
             height: '100vh',
@@ -75,6 +111,24 @@ function App() {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
+
+                <div style={{
+                    backgroundColor: "gray",
+                    marginBottom: '2em',
+                    padding: '2em',
+                    borderRadius: 5,
+                    color: "white",
+                    maxWidth: "200px",
+                    minWidth: "200px",
+                    maxHeight: "200px",
+                    minHeight: "200px",
+                    overflow: 'hidden',
+                    overflowY: 'auto',
+                }}>
+                    <blockquote>{quote}</blockquote>
+                    <cite>- {character}</cite>
+                </div>
+
                 <div style={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -124,7 +178,7 @@ function App() {
                     backgroundColor: '#fff'
                 }}>
                     <p>
-                        {question || "Ask a question!"}
+                        {question || "Ask me a question, laddy or lassie!"}
                     </p>
                 </div>
             </header>
