@@ -27,11 +27,13 @@ const textSplitter = new RecursiveCharacterTextSplitter(
 
 const splitDocs = await textSplitter.splitDocuments(data)
 
+// STORE EMBEDDING
 let vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);
 // // const vectordata = await embeddings.embedQuery("Hello World!");
 // console.log(vectordata)
 // console.log(`Created vector with ${vectordata.length} values`)
 
+// CREATE VECTOR FUNCTION
 async function createVectorstore() {
     const loader = new TextLoader("lotrintro.txt"); // Path to your text file
     const docs = await loader.load();  // Load documents from the file
@@ -41,6 +43,7 @@ async function createVectorstore() {
     vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);  // Create the vector store
     await vectorStore.save("vectordb"); // Save vectors to the specified directory
 }
+// END CREATE VECTOR FUNCTION
 
 // Call the createVectorstore function to initialize the vector store before server starts handling requests
 createVectorstore().then(() => {
@@ -55,11 +58,14 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const port = 5000;
+
+// GPT3.5 MODEL
 const model = new AzureChatOpenAI({temperature: 1})
 const promptTemplate = ChatPromptTemplate.fromMessages([
     ["system", ""],
     ["human", "{input}"]
 ]);
+// END GPT3.5 MODEL
 
 splitDocs.forEach((doc, index) => {
     console.log(doc.pageContent);
@@ -108,6 +114,7 @@ app.post('/', async (req, res) => {
 
     //END DEEPSEEK R1 MODEL
 
+    // GPT 3.5 TURBO MODEL
     const messages = await promptTemplate.formatMessages({ input: `${context}\n\nUser: ${prompt}` });
 
         const response = await model.invoke(messages);
@@ -117,7 +124,7 @@ app.post('/', async (req, res) => {
         res.json({ message: response.content });
 
     })
-
+    // END GPT TURBO 3.5 MODEL
     app.listen(port, () => {
         console.log(`Example app listening on port ${port}`);
     }); // End
