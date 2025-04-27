@@ -35,13 +35,12 @@ Om de backend vervolgens te laten draaien, run het command `npm run dev`.
 
 Om gebruik te kunnen maken van het Language Model heb je API keys nodig, deze kunnen worden ingesteld binnen een `.env` bestand, die je zelf aan kan maken in de server map.
 
-`AZURE_OPENAI_API_VERSION=
-AZURE_OPENAI_API_INSTANCE_NAME=
-AZURE_OPENAI_API_KEY=
-AZURE_OPENAI_API_DEPLOYMENT_NAME=
-AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME=
-LOTR_API_KEY=
+`AZURE_OPENAI_API_VERSION=`
+`AZURE_OPENAI_API_INSTANCE_NAME=`
+`AZURE_OPENAI_API_KEY=` 
+`AZURE_OPENAI_API_DEPLOYMENT_NAME=`
+`AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME=`
+`LOTR_API_KEY=`
+`HUGGING_FACE=`
 
-HUGGING_FACE=`
-
-Vul de volgende velden aan met je eigen keys.
+Vul de volgende velden aan met je eigen keys, deze keys kan je via `OpenAI` en `HuggingFace` aanvragen na het registreren van een gebruikrs profiel.
