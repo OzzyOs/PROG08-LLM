@@ -6,12 +6,12 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { FaissStore } from "@langchain/community/vectorstores/faiss"; // Import FaissStore
-import {InferenceClient} from "@huggingface/inference";                 // Import Inference Client for Hugging Face
+import { InferenceClient } from "@huggingface/inference";             // Import Inference Client for Hugging Face
 
 dotenv.config();
 
 // HUGGING FACE
-const client = new InferenceClient(process.env.HUGGING_FACE);
+const client = new InferenceClient(process.env.HUGGING_FACE);   // Client instance for use of Hugging Face API's.
 // END HUGGING FACE
 
 const embeddings = new AzureOpenAIEmbeddings({
@@ -19,23 +19,7 @@ const embeddings = new AzureOpenAIEmbeddings({
     azureOpenAIApiEmbeddingsDeploymentName: process.env.AZURE_EMBEDDINGS_DEPLOYMENT_NAME
 });
 
-const loader = new TextLoader("lotrintro.txt")
-
-const data = await loader.load()
-
-const textSplitter = new RecursiveCharacterTextSplitter(
-    {chunkSize: 1500, chunkOverlap: 100}
-)
-
-const splitDocs = await textSplitter.splitDocuments(data)
-
-// STORE EMBEDDING
-let vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);
-// // const vectordata = await embeddings.embedQuery("Hello World!");
-// console.log(vectordata)
-// console.log(`Created vector with ${vectordata.length} values`)
-
-// END STORE EMBEDDING
+let vectorStore;
 
 // CREATE VECTOR FUNCTION
 async function createVectorstore() {
@@ -47,8 +31,13 @@ async function createVectorstore() {
     const splitDocs = await textSplitter.splitDocuments(docs);  // Split the docs into smaller chunks
     console.log(`Document split into ${splitDocs.length} chunks. Now saving into vector store`); // Log amount of chunks are being saved.
     vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);    // Create the vector store using FaissStore
-    await vectorStore.save("vectordb");                                     // Save vector to the specified directory
+    await vectorStore.save("vectordb"); // Save vector to the specified directory
+    splitDocs.forEach((doc, index) => { // Log the data
+        console.log(doc.pageContent);
+        console.log();
+    });
 }
+
 // END CREATE VECTOR FUNCTION
 
 // Call the createVectorstore function to initialize the vector store before server starts handling requests
@@ -84,10 +73,7 @@ const deepSeekPromptTemplate = (context, prompt) => [       // Prompt template f
     },
 ];
 
-splitDocs.forEach((doc, index) => {
-    console.log(doc.pageContent);
-    console.log();
-});
+
 
 // TEST IF END POINT IS BEING CALLED
 
