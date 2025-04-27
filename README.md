@@ -15,3 +15,5 @@ Gebouwd backend gemaakt met Express.js en de Frontend met React!
 
 Na het clonen van de repository, map naar client -> frontend en run het volgende command in de terminal `npm install`.
 Om de frontend vervolgens te draaien, run het command `npm start`.
+
+<img width="397" alt="image" src="https://github.com/user-attachments/assets/992ae4d3-106b-4cf9-8d9c-4a7dd25aff66" />
