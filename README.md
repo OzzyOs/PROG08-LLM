@@ -44,3 +44,10 @@ Om gebruik te kunnen maken van het Language Model heb je API keys nodig, deze ku
 `HUGGING_FACE=`
 
 Vul de volgende velden aan met je eigen keys, deze keys kan je via `OpenAI` en `HuggingFace` aanvragen na het registreren van een gebruikrs profiel.
+
+In de code zijn twee verschillende LLM's beschikbaar, ze zijn aan te merken aan de comments. Er zijn verschillende `deepseek` modellen beschikbaar (voornamelijk R1 & GPT 3.5 Turbo), uncomment de code binnen de aangegeven lijnen en comment de lijnen van het andere model. Herstart de `server` en refresh de frontend!
+
+<img width="733" alt="image" src="https://github.com/user-attachments/assets/c83cdae4-e199-4e4a-a051-57f5b4bd8e97" />
+
+
+
