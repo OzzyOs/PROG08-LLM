@@ -6,11 +6,13 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { FaissStore } from "@langchain/community/vectorstores/faiss"; // Import FaissStore
-// import { InferenceClient }  from "@huggingface/inference";
+import {InferenceClient} from "@huggingface/inference";
 
 dotenv.config();
 
-// const client = new InferenceClient("process.env.HUGGING_FACE");
+// HUGGING FACE
+const client = new InferenceClient(process.env.HUGGING_FACE);
+// END HUGGING FACE
 
 const embeddings = new AzureOpenAIEmbeddings({
     temperature: 0,
@@ -32,6 +34,8 @@ let vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);
 // // const vectordata = await embeddings.embedQuery("Hello World!");
 // console.log(vectordata)
 // console.log(`Created vector with ${vectordata.length} values`)
+
+// END STORE EMBEDDING
 
 // CREATE VECTOR FUNCTION
 async function createVectorstore() {
@@ -60,11 +64,11 @@ app.use(express.urlencoded({ extended: true }))
 const port = 5000;
 
 // GPT3.5 MODEL
-const model = new AzureChatOpenAI({temperature: 1})
-const promptTemplate = ChatPromptTemplate.fromMessages([
-    ["system", ""],
-    ["human", "{input}"]
-]);
+// const model = new AzureChatOpenAI({temperature: 1})
+// const promptTemplate = ChatPromptTemplate.fromMessages([
+//     ["system", ""],
+//     ["human", "{input}"]
+// ]);
 // END GPT3.5 MODEL
 
 splitDocs.forEach((doc, index) => {
@@ -92,36 +96,36 @@ app.post('/', async (req, res) => {
     const context = result.map(item => item.pageContent).join("\n\n")
 
     //DEEPSEEK R1 MODEL
-    // const messages = [
-    //     {
-    //         role: "user",
-    //         content: `${context}\n\nUser: ${prompt}`,
-    //     },
-    // ];
-    //
-    // // Send the prompt to the DeepSeek LLM via Hugging Face's InferenceClient
-    // const chatCompletion = await client.chatCompletion({
-    //     provider: "novita",
-    //     model: "deepseek-ai/DeepSeek-V3-0324",  // Use the DeepSeek model here
-    //     messages: messages,
-    //     max_tokens: 512,
-    // });
-    //
-    // console.log("The user asked for: " + prompt);
-    // console.log("Response from DeepSeek:", chatCompletion.choices[0].message.content);
-    //
-    // res.json({ message: chatCompletion.choices[0].message.content });
+    const messages = [
+        {
+            role: "user",
+            content: `${context}\n\nUser: ${prompt}`,
+        },
+    ];
+
+    // Send the prompt to the DeepSeek LLM via Hugging Face's InferenceClient
+    const chatCompletion = await client.chatCompletion({
+        provider: "novita",
+        model: "deepseek-ai/DeepSeek-R1",  // Use the DeepSeek model here
+        messages: messages,
+        max_tokens: 512,
+    });
+
+    console.log("The user asked for: " + prompt);
+    console.log("Response from DeepSeek:", chatCompletion.choices[0].message.content);
+
+    res.json({ message: chatCompletion.choices[0].message.content });
 
     //END DEEPSEEK R1 MODEL
 
     // GPT 3.5 TURBO MODEL
-    const messages = await promptTemplate.formatMessages({ input: `${context}\n\nUser: ${prompt}` });
-
-        const response = await model.invoke(messages);
-
-        console.log("The user asked for :" + prompt)
-
-        res.json({ message: response.content });
+    // const messages = await promptTemplate.formatMessages({ input: `${context}\n\nUser: ${prompt}` });
+    //
+    //     const response = await model.invoke(messages);
+    //
+    //     console.log("The user asked for :" + prompt)
+    //
+    //     res.json({ message: response.content });
 
     })
     // END GPT TURBO 3.5 MODEL
