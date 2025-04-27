@@ -6,7 +6,7 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { TextLoader } from "langchain/document_loaders/fs/text";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { FaissStore } from "@langchain/community/vectorstores/faiss"; // Import FaissStore
-import {InferenceClient} from "@huggingface/inference";
+import {InferenceClient} from "@huggingface/inference";                 // Import Inference Client for Hugging Face
 
 dotenv.config();
 
@@ -39,13 +39,15 @@ let vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);
 
 // CREATE VECTOR FUNCTION
 async function createVectorstore() {
-    const loader = new TextLoader("lotrintro.txt"); // Path to your text file
-    const docs = await loader.load();  // Load documents from the file
-    const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 200 });  // Split documents into chunks
+    const loader = new TextLoader("lotrintro.txt");     // Path to your text file
+    const docs = await loader.load();                   // Call 'load' instance, to load documents from the file
+    const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000, chunkOverlap: 200 });  // Split long documents into smaller chunks
+                                                                                                                                // Try, ideally, create text blocks of 1000 characters max.
+                                                                                                                                // Overlap of 200 characters, to help maintain better context
     const splitDocs = await textSplitter.splitDocuments(docs);  // Split the docs into smaller chunks
-    console.log(`Document split into ${splitDocs.length} chunks. Now saving into vector store`);
-    vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);  // Create the vector store
-    await vectorStore.save("vectordb"); // Save vectors to the specified directory
+    console.log(`Document split into ${splitDocs.length} chunks. Now saving into vector store`); // Log amount of chunks are being saved.
+    vectorStore = await FaissStore.fromDocuments(splitDocs, embeddings);    // Create the vector store using FaissStore
+    await vectorStore.save("vectordb");                                     // Save vector to the specified directory
 }
 // END CREATE VECTOR FUNCTION
 
@@ -64,12 +66,23 @@ app.use(express.urlencoded({ extended: true }))
 const port = 5000;
 
 // GPT3.5 MODEL
+
 // const model = new AzureChatOpenAI({temperature: 1})
-// const promptTemplate = ChatPromptTemplate.fromMessages([
-//     ["system", ""],
+// const promptTemplate = ChatPromptTemplate.fromMessages([ // Prompt template for GPT 3.5
+//     ["system", "You are a knowledgable Hobbit, that takes a smoke from his pipe after every answer."],
 //     ["human", "{input}"]
 // ]);
+
 // END GPT3.5 MODEL
+
+const deepSeekPromptTemplate = (context, prompt) => [       // Prompt template for Deep Seek
+    {
+        role:"system", content:"You are a knowledgable Hobbit, that takes a smoke from his pipe after every answer.",
+    },
+    {
+        role: "user", content: `${context}\n\nUser: ${prompt}`,
+    },
+];
 
 splitDocs.forEach((doc, index) => {
     console.log(doc.pageContent);
@@ -96,22 +109,15 @@ app.post('/', async (req, res) => {
     const context = result.map(item => item.pageContent).join("\n\n")
 
     //DEEPSEEK R1 MODEL
-    const messages = [
-        {
-            role:"system", content:"You are a knowledgable Hobbit",
 
-        },
-        {
-            role: "user", content: `${context}\n\nUser: ${prompt}`,
-        },
-    ];
+    const messages = deepSeekPromptTemplate(context, prompt); // Messages variable defined by custom Template.
 
     // Send the prompt to the DeepSeek LLM via Hugging Face's InferenceClient
     const chatCompletion = await client.chatCompletion({
-        provider: "novita",
-        model: "deepseek-ai/DeepSeek-R1",  // Use the DeepSeek model here
-        messages: messages,
-        max_tokens: 512,
+        provider: "novita",                                                 // Selected Inference Provider
+        model: "deepseek-ai/DeepSeek-R1",                                   // Use the DeepSeek model here
+        messages: messages,                                                 // Property refering to message variable.
+        max_tokens: 512,                                                    // Max Tokens to be used in a prompt request.
     });
 
     console.log("The user asked for: " + prompt);
