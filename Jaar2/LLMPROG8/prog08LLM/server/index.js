@@ -98,8 +98,11 @@ app.post('/', async (req, res) => {
     //DEEPSEEK R1 MODEL
     const messages = [
         {
-            role: "user",
-            content: `${context}\n\nUser: ${prompt}`,
+            role:"system", content:"You are a knowledgable Hobbit",
+
+        },
+        {
+            role: "user", content: `${context}\n\nUser: ${prompt}`,
         },
     ];
 
