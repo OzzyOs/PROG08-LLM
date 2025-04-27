@@ -17,3 +17,11 @@ Na het clonen van de repository, map naar client -> frontend en run het volgende
 Om de frontend vervolgens te draaien, run het command `npm start`.
 
 <img width="397" alt="image" src="https://github.com/user-attachments/assets/992ae4d3-106b-4cf9-8d9c-4a7dd25aff66" />
+
+### Backend : 
+
+<img width="343" alt="image" src="https://github.com/user-attachments/assets/bab457b1-667b-4450-90cc-3d37993411a0" />
+
+Na het clonen van de repository, map naar server en run het volgende command `npm install`.
+
+
