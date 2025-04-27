@@ -2,8 +2,17 @@
 
 ### De applicatie is gericht naar boeklezers (voornamelijk Lord of the Rings) die snel toegang willen tot passages vanuit de gegeven documentatie.
 
-LLM die reageert met de rol van een Dwerg uit de wereld van "The Lord of the Rings".
+LLM die reageert met de rol van een, [insert preference], uit de wereld van "The Lord of the Rings".
 Met toegang tot een document van 15 pagina's, kan het language model vragen beantwoorden met betrekking tot het document en andere vragen.
+Wil je zelf het embedded document aanpassen? 
+
+<img width="651" alt="image" src="https://github.com/user-attachments/assets/451d76e1-df2e-4384-a144-95b89fa9ff29" />
+
+Kan dat hier.
+
+<img width="206" alt="image" src="https://github.com/user-attachments/assets/e6486527-3a0f-4ffe-b2fe-2650ca34e79c" />
+
+Pas de content van lotrintro.txt aan of upload je eigen bestand, vergeet niet te refereren naar het juiste document.
 
 Gebouwd backend gemaakt met Express.js en de Frontend met React!
 
