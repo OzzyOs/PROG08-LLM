@@ -24,4 +24,24 @@ Om de frontend vervolgens te draaien, run het command `npm start`.
 
 Na het clonen van de repository, map naar server en run het volgende command `npm install`.
 
+<img width="328" alt="image" src="https://github.com/user-attachments/assets/ad1646a3-7e26-43c7-be9e-98e1f05f63e7" />
 
+Om de backend vervolgens te laten draaien, run het command `npm run dev`.
+
+### LLM
+
+<img width="196" alt="image" src="https://github.com/user-attachments/assets/0c37466a-533b-4080-9a43-b6bcdb92b5f1" />
+
+
+Om gebruik te kunnen maken van het Language Model heb je API keys nodig, deze kunnen worden ingesteld binnen een `.env` bestand, die je zelf aan kan maken in de server map.
+
+`AZURE_OPENAI_API_VERSION=
+AZURE_OPENAI_API_INSTANCE_NAME=
+AZURE_OPENAI_API_KEY=
+AZURE_OPENAI_API_DEPLOYMENT_NAME=
+AZURE_OPENAI_API_EMBEDDINGS_DEPLOYMENT_NAME=
+LOTR_API_KEY=
+
+HUGGING_FACE=`
+
+Vul de volgende velden aan met je eigen keys.
